@@ -13,6 +13,7 @@ module WebhookService
       @channel     = options.fetch(:channel, nil)
       @username    = options.fetch(:username, nil)
       @webhook_url = options.fetch(:webhook_url, nil)
+      @attachments = options.fetch(:attachments, nil)
     end
 
     def send
@@ -23,6 +24,10 @@ module WebhookService
         @toSend.merge!(icon_emoji: @icon_type)
       elsif @icon_url.present?
         @toSend.merge!(icon_url: @icon_url)
+      end
+
+      if @attachments.present?
+        @toSend.merge!(attachments: @attachments)
       end
 
       uri           = URI.parse(uri)
