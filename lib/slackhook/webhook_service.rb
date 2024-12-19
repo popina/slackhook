@@ -17,8 +17,7 @@ module WebhookService
     end
 
     def send
-      uri           = URI::encode(@webhook_url)
-      @toSend       = { channel: @channel, text: @text, username: @username }
+      @toSend = { channel: @channel, text: @text, username: @username }
 
       if @icon_type.present?
         @toSend.merge!(icon_emoji: @icon_type)
@@ -30,7 +29,8 @@ module WebhookService
         @toSend.merge!(attachments: @attachments)
       end
 
-      uri           = URI.parse(uri)
+      uri = URI::Parser.new.parse(@webhook_url)
+
       https         = Net::HTTP.new(uri.host,uri.port)
       https.use_ssl = true
       req           = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
